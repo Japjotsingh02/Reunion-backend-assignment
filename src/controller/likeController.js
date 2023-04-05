@@ -19,7 +19,6 @@ const Like = async (req, res) => {
             return res.status(403).send({ status: false, msg: "You are not authorized to access this data" })
         }
 
-
         let arr = []
         let create = await likeModel.create({ userId: userId, likedID: likedID })
         let find = await likeModel.find({ likedID: likedID, isDeleted: false }).count()
@@ -51,8 +50,6 @@ const Like = async (req, res) => {
     }
 
 }
-
-
 
 
 const unLike = async (req, res) => {

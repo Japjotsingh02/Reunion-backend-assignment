@@ -15,7 +15,6 @@ const commentSchema = new mongoose.Schema(
         },
         comment: {
             type: String
-
         },
         isDeleted: {
             type: Boolean,

@@ -25,7 +25,7 @@ const createComment = async function (req, res) {
 
         let user = await commentModel.create(data);
 
-        return res.status(201).send({ status: true, data: up })
+        return res.status(201).send({ status: true, data: up });
 
     } catch (err) {
         res.status(500).send({ status: "error", error: err.message })

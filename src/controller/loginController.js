@@ -30,6 +30,9 @@ const loginUser = async function(req, res) {
         );
 
         // Set This token In response in Header and Also In body
+        // storing res in cookie
+        // res.cookie('x-api-key',token,{httpOnly:true});
+        
         res.setHeader("x-api-key", token);
         return res.status(200).send({ status: true, data: token });
     } catch (err) {

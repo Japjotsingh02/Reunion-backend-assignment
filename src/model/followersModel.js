@@ -16,7 +16,6 @@ const followersSchema = new mongoose.Schema(
         isDeleted: {
             type: Boolean,
             default: false
-
         }
 
     },

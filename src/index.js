@@ -8,7 +8,7 @@ const { AppConfig } = require('aws-sdk');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use( multer().any())
-
+// const cookieParser=require('cookie-parser');
 
 mongoose.connect("mongodb+srv://japjots07:sunjap137@cluster0.l4g6ulk.mongodb.net/?retryWrites=true&w=majority", {
         useNewUrlParser: true
@@ -18,7 +18,8 @@ mongoose.connect("mongodb+srv://japjots07:sunjap137@cluster0.l4g6ulk.mongodb.net
 
 app.use('/', route);
 
-app.listen(process.env.PORT || 3000, function() {
-    console.log('Express app running on port ' + (process.env.PORT || 3000))
+app.listen(process.env.PORT || 4000, function() {
+    console.log('Express app running on port ' + (process.env.PORT || 4000))
 });
+
 

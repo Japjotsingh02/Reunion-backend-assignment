@@ -35,18 +35,14 @@ let uploadFile = async (file) => {
         // else return "there is an error"
 
     })
-}
-
-
-
+};
 
 const createuser = async (req, res) => {
     try {
         let data = JSON.parse(JSON.stringify(req.body))
         //  data validation
 
-        let { username, profilePicture, coverPicture, email, password, followers, followings, isAdmin, desc, city, from, relationship, isDeleted } = data
-
+        let { username, profilePicture, coverPicture, email, password, followers, followings, isAdmin, desc, city, from, relationship, isDeleted } = data;
 
         if (data === undefined || Object.keys(data).length === 0) return res.status(400).send({ status: false, msg: "plz enter some data" })
 
@@ -67,7 +63,6 @@ const createuser = async (req, res) => {
         if (!cityy) return res.status(400).send({ status: false, msg: "enter valid  name of city" })
 
         data.city = data.city.trim()
-
 
         // title validation
         if (!relationship) return res.status(400).send({ status: false, msg: "relationship must be present" });
@@ -107,11 +102,8 @@ const createuser = async (req, res) => {
         data.profilePicture = uploadedFileURL
 
 
-
-
         let uploadedFile = await uploadFile(files[1])
         data.coverPicture = uploadedFile
-
 
         let user = await userModel.create(data)
 
@@ -121,72 +113,50 @@ const createuser = async (req, res) => {
     }
 }
 
-
 const Getuser = async (req, res) => {
     try {
-        let Id = req.params.userId
+        let Id = req.params.userId;
 
+        // all of the users who are following him/her
+        let fol = await followersModel.find({ followingID: Id, isDeleted: false });
+        let foll = fol.length;
+        console.log(foll,fol);
 
-        let foll = await followersModel.find({ followingID: Id, isDeleted: false }).count()
-        let fol = await followersModel.find({ followingID: Id, isDeleted: false })
-
-        
-
-
-        let arr1 = []
-        let arr2 =[]
+        let arr1 = [];
+        let arr2 =[];
 
         for (let i = 0; i < fol.length; i++) {
             let find = await userModel.findOne({ _id: fol[i].userId }).select({ username: 1 })
 
             arr1.push(JSON.parse(JSON.stringify(find)))
-
-
         }
 
         let userr = await userModel.findByIdAndUpdate({ _id: Id, isDeleted: false }, {
-
             $set: { followers: foll }
 
         }, { new: true })
 
-        
-
-
+        // all of the users he/she is following
         let folll = await followersModel.find({userId:Id,isDeleted:false})
-        let fo = await followersModel.find({userId:Id,isDeleted:false}).count()
-
+        let fo = folll.count()
 
         let use = await userModel.findByIdAndUpdate({ _id: Id, isDeleted: false }, {
-
             $set: { followings: fo }
-
         }, { new: true })
 
         for (let i = 0; i < folll.length; i++) {
-            
             let Follow = await userModel.findOne({_id:folll[i].followingID}).select({username:1})
-
             arr2.push(JSON.parse(JSON.stringify(Follow)))
-
-
         }
-          let following = await followersModel.find({userId:Id})
-
+        let following = await followersModel.find({userId:Id})
 
         let Doc = {
-
             User: userr,
             followers: arr1,
             followings:arr2
-
-
         }
 
         return res.status(201).send({ status: true, data: Doc })
-
-
-
 
     } catch (err) {
         res.status(500).send({ status: "error", msg: err.message })
